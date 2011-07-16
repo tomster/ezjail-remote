@@ -35,6 +35,6 @@ setup(name='ezjail.remote',
       entry_points="""
       # -*- Entry points: -*-
         [console_scripts]
-        ezjail-remote=ezjailremote.command:main
+        ezjail-remote=ezjailremote.command:ezjailremote
       """,
       )
