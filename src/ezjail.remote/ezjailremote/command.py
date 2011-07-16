@@ -50,7 +50,7 @@ class CmdHelp(Command):
                 name = cmd[4:]
                 f = getattr(ezjailremote, cmd)
                 aliases = [x for x in f_to_name[f] if x != name]
-                if len(aliases):
+                if len(aliases): # pragma: no cover (until we actually have aliases)
                     print("    %s (%s)" % (name, ", ".join(aliases)))
                 else:
                     print("    %s" % name)

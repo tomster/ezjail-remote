@@ -1,11 +1,11 @@
 import unittest2
 
+from ezjailremote.command import ezjailremote
 from ezjailremote.tests import CommandLayer
 
 class BasicSetupTests(unittest2.TestCase):
 
     layer = CommandLayer
 
-    def test_main_command(self):
-        from ezjailremote.command import ezjailremote as main
-        main()
+    def test_calling_main_command(self):
+        ezjailremote()

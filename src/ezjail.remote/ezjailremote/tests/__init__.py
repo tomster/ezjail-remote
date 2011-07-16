@@ -13,12 +13,8 @@ class StdOut(StringIO.StringIO):
 
     def write(self, s):
         # uncomment the following for debugging tests!
-        #self.__stdout.write(s)
+        # self.__stdout.write(s)
         StringIO.StringIO.write(self, s)
-
-    def read(self):
-        self.seek(0)
-        self.__stdout.write(StringIO.StringIO.read(self))
 
 
 class CommandLayer(object):
