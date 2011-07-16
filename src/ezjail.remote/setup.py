@@ -1,7 +1,16 @@
 from setuptools import setup, find_packages
-import sys, os
 
 version = '0.0'
+
+requires = [
+    "Fabric",
+]
+
+test_requires = [
+    "zope.testing",
+    "unittest2",
+]
+
 
 setup(name='ezjail.remote',
       version=version,
@@ -18,9 +27,14 @@ setup(name='ezjail.remote',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          # -*- Extra requirements: -*-
+         requires
       ],
+      extras_require = {
+        "tests": test_requires,
+      },
       entry_points="""
       # -*- Entry points: -*-
+        [console_scripts]
+        ezjail-remote=ezjailremote.command:main
       """,
       )
