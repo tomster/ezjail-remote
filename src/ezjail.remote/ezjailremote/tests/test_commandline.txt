@@ -31,4 +31,5 @@ Calling the help command with a specific command name shows its help function:
 
 Finally, let's actually call a command:
 
-  >>> ezjailremote(args=['jls', '-v'])
+  >>> ezjailremote(args=['jls', 'brieftaube.vb'])
+  [brieftaube.vb] run: ...

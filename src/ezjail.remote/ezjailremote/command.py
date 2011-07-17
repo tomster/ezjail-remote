@@ -23,7 +23,9 @@ class CmdJls(Command):
 
     def __call__(self):
         options, xargs = self.parser.parse_args(self.ezjailremote.args[2:])
-
+        from fabric.api import run, settings
+        with settings(host_string=xargs[0], shell="/bin/tcsh"):
+            run('/usr/sbin/jls', shell=False)
 
 class CmdHelp(Command):
 
