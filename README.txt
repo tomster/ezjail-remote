@@ -28,9 +28,6 @@ requires root login on the host (and ssh access, obviously)
 parameters
 **********
 
-hosts
-  list of hosts
-
 admin
   name of the admin user to create
 
@@ -41,13 +38,10 @@ keyfile
 create
 ------
 
-creates a new jail instance on the given host. it uses the *ezjail-remote* flavor by default, which in turn allows us to perform further (even interactive) customizations that 'naked' ezjail flavors don't allow for.
+creates a new jail instance on the given host, creates an admin user with sudo privileges and enables ssh access via public key.
 
 parameters
 **********
-
-host
-  name of the jailhost, *required*
 
 name
   name of the new jail, *required*
@@ -56,18 +50,12 @@ IP
   the IP address, *required*
 
 admin
-  name of the admin user for the jail, defaults to ``admin``.
+  name of the admin user for the jail, defaults to the current user. the user will be created and added to ``wheel`` (which in turn will be allowed to sudo without password).
 
 keyfile
-  public key for that admin user. if none is provided, a private key will be created and its public part installed.
+  public key to install for the admin user, defaults to ``~/.ssh/identity.pub``.
 
 flavour
-  *optional* the name of a registered flavour. Note that this explicitly does *not* correspond to any ezjail flavours on the jail host
+  the name of the local flavour, defaults to ``basic``.
 
-Extending ezjail-remote
-=======================
-
-Of course, the real fun starts once you create more elaborate commands that can use the full power and flexibility of fabric. like ezjail, we call these *flavours*.
-
-note: perhaps use ZCA to register flavours?
  
