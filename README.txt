@@ -1,6 +1,14 @@
 ezjail-remote is a fabric based wrapper around the ``ezjail-admin`` command offering better support for its flavours, notably parameters and interactive configuration.
 
-it installs an executable named ``ezjail-remote`` with the following commands, each a wrapper for its identically named ``ezjail-admin`` counterpart.
+Usage
+=====
+
+./bin/fab -H hosts <COMMAND>:param1,param2,param3
+
+or
+
+./bin/fab -H hosts <COMMAND>:param1=foo,param3=bar
+
 
 Commands
 ========
