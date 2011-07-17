@@ -2,12 +2,15 @@ import sys
 from os import path
 from datetime import datetime
 
-from fabric.api import run, sudo, put, env, settings, hide
+from fabric.api import run, sudo, put, env, settings
+from fabric.state import output
 
 EZJAIL_JAILDIR = '/usr/jails'
 EZJAIL_RC = '/usr/local/etc/rc.d/ezjail.sh'
 
 env['shell'] = '/bin/sh -c'
+output['running'] = False
+
 
 def jls():
     run('jls')
@@ -23,9 +26,7 @@ def create(name,
     if not path.exists(local_flavour_path):
         sys.exit("No such flavour '%s'" % local_flavour_path)
 
-    with settings(
-        hide('warnings', 'running', 'stderr'),
-        warn_only=True):
+    with settings(warn_only=True):
 
         tmp_flavour = '%s-%s' % (flavour, datetime.now().strftime('%Y%m%d%H%M%s'))
         remote_flavour_path = path.join(EZJAIL_JAILDIR, 'flavours', tmp_flavour)
