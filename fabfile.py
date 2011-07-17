@@ -17,10 +17,13 @@ def jls():
 
 def create(name, 
     ip,
-    admin=u'root',
+    admin=None,
     keyfile=None, 
     flavour=u'basic'):
 
+    if admin is None:
+        admin = env['local_user']
+    
     print("name: %s, ip: %s, flavour: %s" % (name, ip, flavour))
     local_flavour_path = path.abspath(path.join('flavours', flavour))
     if not path.exists(local_flavour_path):
