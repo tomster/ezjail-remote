@@ -2,7 +2,7 @@ import sys
 from os import path
 from datetime import datetime
 
-from fabric.api import run, sudo, put, env, settings
+from fabric.api import run, sudo, put, env, settings, prompt
 from fabric.state import output
 from fabric.contrib.files import upload_template
 
@@ -61,3 +61,13 @@ def create(name,
             # start up the jail:
             sudo("%s start %s" % (EZJAIL_RC, name))
         sudo("rm -rf %s" % remote_flavour_path)
+
+def destroy(name): 
+    really = prompt('Are you ABSOLUTELY sure you want to destroy the jail %s?\n'
+        'The jail will be stopped if running, deleted from ezjail and on the filesystem!!\n'
+        'Type YES to continue:' % name)
+    if really != 'YES':
+        sys.exit("Glad I asked...!")
+    sudo("%s stop %s" % (EZJAIL_RC, name))
+    sudo("ezjail-admin delete %s" % name)
+    sudo("rm -rf %s" % (path.join(EZJAIL_JAILDIR, name)))
