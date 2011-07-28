@@ -80,8 +80,17 @@ flavour
   the name of the local flavour, defaults to ``basic``.
 
 
-Development
-===========
+Installation
+============
+
+Simply use easy_install::
+
+  easy_install ezjail-remote
+
+Devlopment
+==========
+
+To develop ezjail-remote itself, check out a copy of this repository and then::
 
   virtualenv . --no-site-package
   ./bin/python setup.py develop
