@@ -6,6 +6,8 @@ from fabric.api import run, sudo, put, env, settings, prompt
 from fabric.state import output
 from fabric.contrib.files import upload_template
 
+from ezjailremote import here
+
 EZJAIL_JAILDIR = '/usr/jails'
 EZJAIL_RC = '/usr/local/etc/rc.d/ezjail.sh'
 
@@ -32,7 +34,7 @@ def create(name,
         sys.exit("No such keyfile '%s'" % keyfile)
 
     print("name: %s, ip: %s, flavour: %s" % (name, ip, flavour))
-    local_flavour_path = path.abspath(path.join('flavours', flavour))
+    local_flavour_path = path.abspath(path.join(here, 'flavours', flavour))
     if not path.exists(local_flavour_path):
         sys.exit("No such flavour '%s'" % local_flavour_path)
 
