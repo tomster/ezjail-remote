@@ -2,7 +2,7 @@ import sys
 from os import path
 from datetime import datetime
 
-from fabric.api import run, sudo, put, env, settings, prompt
+from fabric.api import run, sudo, put, env, settings, prompt, task, hide
 from fabric.state import output
 from fabric.contrib.files import upload_template
 
@@ -16,16 +16,14 @@ env['shell'] = '/bin/sh -c'
 output['running'] = False
 
 
-def jls():
-    run('jls')
-
+@task
 def create(name, 
     ip,
     admin=None,
     keyfile=None, 
     flavour=u'basic'):
 
-    """create:<name>,<ip>(,<admin>,<keyfile>,flavour)
+    """<name>,<ip>(,<admin>,<keyfile>,flavour)
     
     Create a jail instance with the given name and IP address.
     Configures ssh access for the given admin user and ssh key.
@@ -76,7 +74,9 @@ def create(name,
             sudo("%s start %s" % (EZJAIL_RC, name))
         sudo("rm -rf %s" % remote_flavour_path)
 
+@task
 def destroy(name): 
+    """<name>"""
     really = prompt('Are you ABSOLUTELY sure you want to destroy the jail %s?\n'
         'The jail will be stopped if running, deleted from ezjail and on the filesystem!!\n'
         'Type YES to continue:' % name)
@@ -85,3 +85,15 @@ def destroy(name):
     sudo("%s stop %s" % (EZJAIL_RC, name))
     sudo("%s delete %s" % (EZJAIL_ADMIN, name))
     sudo("rm -rf %s" % (path.join(EZJAIL_JAILDIR, name)))
+
+@task(default=True, aliases=['archive', 'config', 'console', 'delete', 'install', 'list', 'restore', 'update'])
+def usage(*xargs, **kw):
+    command = env.get('command')
+    if command == 'usage':
+        command = '--help'
+    args_string = ''
+    for item in kw.items():
+        args_string += '%s %s ' % item
+    print("%s %s %s %s" % (EZJAIL_ADMIN, command, args_string, ' '.join(xargs)))
+    with hide('warnings', 'aborts'):
+        sudo("%s %s %s %s" % (EZJAIL_ADMIN, command, args_string, ' '.join(xargs)))
