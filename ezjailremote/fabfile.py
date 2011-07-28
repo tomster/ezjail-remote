@@ -24,6 +24,17 @@ def create(name,
     keyfile=None, 
     flavour=u'basic'):
 
+    """create:<name>,<ip>(,<admin>,<keyfile>,flavour)
+    
+    Create a jail instance with the given name and IP address.
+    Configures ssh access for the given admin user and ssh key.
+    
+    admin: defaults to the current user
+    keyfile: defaults to ~/.ssh/identity.pub
+    flavour: defaults to 'basic' and refers to a LOCAL flavour, NOT any on the host
+    
+    """
+
     if admin is None:
         admin = env['local_user']
     
