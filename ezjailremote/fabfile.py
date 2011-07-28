@@ -94,6 +94,5 @@ def usage(*xargs, **kw):
     args_string = ''
     for item in kw.items():
         args_string += '%s %s ' % item
-    print("%s %s %s %s" % (EZJAIL_ADMIN, command, args_string, ' '.join(xargs)))
     with hide('warnings', 'aborts'):
         sudo("%s %s %s %s" % (EZJAIL_ADMIN, command, args_string, ' '.join(xargs)))
