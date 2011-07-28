@@ -1,3 +1,5 @@
 .coverage
 bin
 coverage
+include
+lib
