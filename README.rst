@@ -1,4 +1,4 @@
-``ezjail-remote`` is a convenience wrapper around the ``ezjail-admin`` command.
+``ezjail-remote`` is a convenience wrapper for the ``ezjail-admin`` command of the most excellent `ezjail <http://erdgeist.org/arts/software/ezjail/>`_.
 
 Its main features are:
 
