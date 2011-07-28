@@ -22,5 +22,7 @@ setup(name='ezjailremote',
       ],
       entry_points="""
       # -*- Entry points: -*-
+        [console_scripts]
+        ezjail-remote=ezjailremote:commandline
       """,
       )

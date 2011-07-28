@@ -3,11 +3,11 @@ ezjail-remote is a fabric based wrapper around the ``ezjail-admin`` command offe
 Usage
 =====
 
-./bin/fab -H hosts <COMMAND>:param1,param2,param3
+./bin/ezjail-remote -H hosts <COMMAND>:param1,param2,param3
 
 or
 
-./bin/fab -H hosts <COMMAND>:param1=foo,param3=bar
+./bin/ezjail-remote -H hosts <COMMAND>:param1=foo,param3=bar
 
 
 Commands
@@ -58,4 +58,9 @@ keyfile
 flavour
   the name of the local flavour, defaults to ``basic``.
 
- 
+
+Development
+===========
+
+  virtualenv . --no-site-package
+  ./bin/python setup.py develop
