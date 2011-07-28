@@ -1,17 +1,38 @@
-ezjail-remote is a fabric based wrapper around the ``ezjail-admin`` command offering better support for its flavours, notably parameters and interactive configuration.
+``ezjail-remote`` is a convenience wrapper around the ``ezjail-admin`` command.
+
+Its main features are:
+
+ * more sophisticated support for flavours, i.e. interactive configuration and/or templating as opposed to ezjail's hardcoded flavours
+ * you can ssh into jails created by ``ezjail-remote`` immediately upon creation (no more manual mucking about with sshd config or uploading your public key!)
+ * unlike ``ezjail-admin``, ``ezjail-remote`` is not invoked on the jail host, but on your local machine.
 
 Usage
 =====
 
-./bin/ezjail-remote -H hosts <COMMAND>:param1,param2,param3
+ezjail-remote uses the `fabric <http://docs.fabfile.org>`_ library to remotely run its tasks. Basically it provides a so-called *fabfile* that contains all of the commands of ``ezjail-admin`` (version 3.0 as of this writing).
 
-or
+This means that its usage differs slightly from that of ``ezjail-admin``. In particular, you provide the hostname of the jail server via the ``-H`` switch and the paramaters for the command (such as the name of the jail etc) separated with a colon, like so::
 
-./bin/ezjail-remote -H hosts <COMMAND>:param1=foo,param3=bar
+  ezjail-remote -H host(s) <COMMAND>:param1,param2,param3
 
+or::
+
+  ezjail-remote -H host(s) <COMMAND>:param1=foo,param3=bar
+
+See the `full documentation of what fabric has to offer here <http://docs.fabfile.org/en/1.2.0/usage/fab.html#command-line-options>`_.
+
+In particualar, you can...
+
+ * run ``ezjail-remote --help`` to see a list of the available *options*
+ * run ``ezjail-remote -l`` to see a list of the available *commands*
+ * run ``ezjail-remote -d COMMAND`` to see a detailed description of a command
+
+As a side effect of using fabric, you can run ezjail-admin commands against multiple jailhosts at the same time.
 
 Commands
 ========
+
+In its simplest form, ezjail remote offers the exact same commands as ezjail-admin, namely ``[archive|config|console|create|delete|install|list|restore|update]``. In addition to that it provides *enhanced versions of the following commands*: ``install``, ``create`` and ``destroy`` (the latter a more thorough variant of the ``delete`` command.)
 
 install
 -------
