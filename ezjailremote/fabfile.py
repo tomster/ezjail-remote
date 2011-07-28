@@ -2,7 +2,7 @@ import sys
 from os import path
 from datetime import datetime
 
-from fabric.api import run, sudo, put, env, settings, prompt, task, hide
+from fabric.api import sudo, put, env, settings, prompt, task, hide
 from fabric.state import output
 from fabric.contrib.files import upload_template
 
