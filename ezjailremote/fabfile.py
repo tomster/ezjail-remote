@@ -10,6 +10,7 @@ from ezjailremote import here
 
 EZJAIL_JAILDIR = '/usr/jails'
 EZJAIL_RC = '/usr/local/etc/rc.d/ezjail.sh'
+EZJAIL_ADMIN = '/usr/local/bin/ezjail-admin'
 
 env['shell'] = '/bin/sh -c'
 output['running'] = False
@@ -60,7 +61,7 @@ def create(name,
             context=locals(), backup=False)
 
         # create the jail using the uploaded flavour
-        create_jail = sudo("ezjail-admin create -f %s %s %s" % (tmp_flavour, name, ip))
+        create_jail = sudo("%s create -f %s %s %s" % (EZJAIL_ADMIN, tmp_flavour, name, ip))
         if create_jail.succeeded:
             jail_path = path.join(EZJAIL_JAILDIR, name)
             # copy resolv.conf from host
@@ -82,5 +83,5 @@ def destroy(name):
     if really != 'YES':
         sys.exit("Glad I asked...!")
     sudo("%s stop %s" % (EZJAIL_RC, name))
-    sudo("ezjail-admin delete %s" % name)
+    sudo("%s delete %s" % (EZJAIL_ADMIN, name))
     sudo("rm -rf %s" % (path.join(EZJAIL_JAILDIR, name)))
