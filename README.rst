@@ -1,4 +1,4 @@
-``ezjail-remote`` is a convenience wrapper for the ``ezjail-admin`` command of the most excellent `ezjail <http://erdgeist.org/arts/software/ezjail/>`_.
+``ezjail-remote`` is a 'remote control' and convenience wrapper for the ``ezjail-admin`` command of the most excellent `ezjail <http://erdgeist.org/arts/software/ezjail/>`_ tool (which in turn is itself a convenience wrapper for `jails <http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/jails.html>`_, `FreeBSD <http://www.freebsd.org>`_'s leight-weight virtualization solution).
 
 Its main features are:
 
