@@ -9,12 +9,12 @@ setup(name='ezjailremote',
           open('README.rst').read()
           + '\n' +
           'Change history\n'
-          '**************\n'
+          '==============\n'
           + '\n' +
           open('HISTORY.rst').read()
           + '\n' +
           'Download\n'
-          '********\n'),
+          '========\n'),
       classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',

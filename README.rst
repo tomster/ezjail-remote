@@ -76,8 +76,8 @@ Simply use easy_install::
 
   easy_install ezjail-remote
 
-Devlopment
-==========
+Development
+===========
 
 To develop ezjail-remote itself, check out a copy of this repository and then::
 
