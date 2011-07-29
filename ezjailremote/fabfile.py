@@ -2,7 +2,7 @@ import sys
 from os import path
 from datetime import datetime
 
-from fabric.api import sudo, put, env, settings, prompt, task, hide
+from fabric.api import sudo, put, env, run, settings, prompt, task, hide
 from fabric.state import output
 from fabric.contrib.files import upload_template
 
@@ -97,3 +97,7 @@ def usage(*xargs, **kw):
         args_string += '%s %s ' % item
     with hide('warnings', 'aborts'):
         sudo("%s %s %s %s" % (EZJAIL_ADMIN, command, args_string, ' '.join(xargs)))
+
+@task
+def jls():
+    run("jls")
