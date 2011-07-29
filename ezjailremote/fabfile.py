@@ -86,8 +86,9 @@ def destroy(name):
     sudo("%s delete %s" % (EZJAIL_ADMIN, name))
     sudo("rm -rf %s" % (path.join(EZJAIL_JAILDIR, name)))
 
-@task(default=True, aliases=['archive', 'config', 'console', 'delete', 'install', 'list', 'restore', 'update'])
+@task(default=True, aliases=['archive', 'config', 'console', 'delete', 'install', 'list', 'restore', 'update', 'start', 'stop'])
 def usage(*xargs, **kw):
+    """(passed directly to ezjail-admin)"""
     command = env.get('command')
     if command == 'usage':
         command = '--help'

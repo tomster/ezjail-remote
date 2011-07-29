@@ -32,7 +32,7 @@ As a side effect of using fabric, you can run ezjail-admin commands against mult
 Commands
 ========
 
-In its simplest form, ezjail remote offers the exact same commands as ezjail-admin, namely ``[archive|config|console|create|delete|install|list|restore|update]``. In addition to that it provides enhanced versions of ``create`` and ``destroy`` (the latter a more thorough variant of the ``delete`` command.)
+In its simplest form, ezjail remote offers the exact same commands as ezjail-admin, namely ``[archive|config|console|create|delete|install|list|restore|start|stop|update]``. In addition to that it provides enhanced versions of ``create`` and ``destroy`` (the latter a more thorough variant of the ``delete`` command.)
 
 create
 ------
