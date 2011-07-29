@@ -21,7 +21,8 @@ def create(name,
     ip,
     admin=None,
     keyfile=None, 
-    flavour=u'basic'):
+    flavour=u'basic',
+    **kw):
 
     """<name>,<ip>(,<admin>,<keyfile>,flavour)
     
@@ -31,7 +32,8 @@ def create(name,
     admin: defaults to the current user
     keyfile: defaults to ~/.ssh/identity.pub
     flavour: defaults to 'basic' and refers to a LOCAL flavour, NOT any on the host
-    
+
+    any additional keyword arguments are passed to the flavour
     """
 
     if admin is None:
@@ -72,6 +74,13 @@ def create(name,
             sudo("chown -R %s %s" % (admin, ssh_config))
             # start up the jail:
             sudo("%s start %s" % (EZJAIL_RC, name))
+            # perform any additional setup the flavour may provide
+            try:
+                flavour_module = __import__('ezjailremote.flavours.%s' % flavour, globals(), locals(), ['setup'], -1)
+                if hasattr(flavour_module, 'setup'):
+                    flavour_module.setup(name, ip, admin, keyfile, **kw)
+            except ImportError:
+                pass
         sudo("rm -rf %s" % remote_flavour_path)
 
 @task

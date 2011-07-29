@@ -39,6 +39,8 @@ create
 
 creates a new jail instance on the given host, creates an admin user with sudo privileges and enables ssh access via public key.
 
+after setting up the jail it attempts to execute a method named ``setup`` from ``ezjailremote.flavours.<name-of-flavour>``, passing on all parameters, including any additional, arbitrary keyword arguments.
+
 parameters
 **********
 
