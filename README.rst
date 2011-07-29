@@ -58,6 +58,17 @@ flavour
   the name of the local flavour, defaults to ``basic``.
 
 
+destroy
+------
+
+stops, removes and deletes the given jail instance (but not before asking you one last time, explicitely). however, once you confirm, the jail is irrevocably *gone*.
+
+parameters
+**********
+
+name
+  name of the new jail, *required*
+
 Installation
 ============
 
