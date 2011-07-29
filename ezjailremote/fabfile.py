@@ -58,9 +58,13 @@ def create(name,
         sudo("mkdir %s" % remote_flavour_path)
         sudo("chown %s %s" % (env['user'], remote_flavour_path))
         put("%s/*" % local_flavour_path, remote_flavour_path)
-        upload_template(path.join(local_flavour_path, 'ezjail.flavour'),
-            path.join(remote_flavour_path, 'ezjail.flavour'),
-            context=locals(), backup=False)
+        local_flavour_script = path.join(local_flavour_path, 'ezjail.flavour')
+        if path.exists(local_flavour_script):
+            upload_template(local_flavour_script,
+                path.join(remote_flavour_path, 'ezjail.flavour'),
+                context=locals(), backup=False)
+        else:
+            print "Warning! no ezjail.flavour found (expected one at %s)" % local_flavour_script
 
         # create the jail using the uploaded flavour
         create_jail = sudo("%s create -f %s %s %s" % (EZJAIL_ADMIN, tmp_flavour, name, ip))
