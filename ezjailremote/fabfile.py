@@ -6,7 +6,6 @@ from fabric.api import sudo, put, env, run, settings, prompt, task, hide
 from fabric.state import output
 from fabric.contrib.files import upload_template
 
-from ezjailremote import here
 
 EZJAIL_JAILDIR = '/usr/jails'
 EZJAIL_RC = '/usr/local/etc/rc.d/ezjail.sh'
@@ -46,9 +45,12 @@ def create(name,
         sys.exit("No such keyfile '%s'" % keyfile)
 
     print("name: %s, ip: %s, flavour: %s" % (name, ip, flavour))
-    local_flavour_path = path.abspath(path.join(here, 'flavours', flavour))
-    if not path.exists(local_flavour_path):
-        sys.exit("No such flavour '%s'" % local_flavour_path)
+
+    try:
+        flavour_module = __import__('ezjailremote.flavours.%s' % flavour, globals(), locals(), ['setup'], -1)
+    except ImportError:
+        sys.exit("No such flavour '%s'" % flavour)
+    local_flavour_path = path.abspath(path.dirname(flavour_module.__file__))
 
     with settings(warn_only=True):
         tmp_flavour = '%s-%s' % (flavour, datetime.now().strftime('%Y%m%d%H%M%s'))
@@ -75,12 +77,8 @@ def create(name,
             # start up the jail:
             sudo("%s start %s" % (EZJAIL_RC, name))
             # perform any additional setup the flavour may provide
-            try:
-                flavour_module = __import__('ezjailremote.flavours.%s' % flavour, globals(), locals(), ['setup'], -1)
-                if hasattr(flavour_module, 'setup'):
-                    flavour_module.setup(name, ip, admin, keyfile, **kw)
-            except ImportError:
-                pass
+            if hasattr(flavour_module, 'setup'):
+                flavour_module.setup(name, ip, admin, keyfile, **kw)
         sudo("rm -rf %s" % remote_flavour_path)
 
 @task
