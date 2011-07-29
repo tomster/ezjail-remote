@@ -83,8 +83,7 @@ def destroy(name):
     if really != 'YES':
         sys.exit("Glad I asked...!")
     sudo("%s stop %s" % (EZJAIL_RC, name))
-    sudo("%s delete %s" % (EZJAIL_ADMIN, name))
-    sudo("rm -rf %s" % (path.join(EZJAIL_JAILDIR, name)))
+    sudo("%s delete -w %s" % (EZJAIL_ADMIN, name))
 
 @task(default=True, aliases=['archive', 'config', 'console', 'delete', 'install', 'list', 'restore', 'update', 'start', 'stop'])
 def usage(*xargs, **kw):
