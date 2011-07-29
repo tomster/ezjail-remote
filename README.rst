@@ -32,29 +32,7 @@ As a side effect of using fabric, you can run ezjail-admin commands against mult
 Commands
 ========
 
-In its simplest form, ezjail remote offers the exact same commands as ezjail-admin, namely ``[archive|config|console|create|delete|install|list|restore|update]``. In addition to that it provides *enhanced versions of the following commands*: ``install``, ``create`` and ``destroy`` (the latter a more thorough variant of the ``delete`` command.)
-
-install
--------
-
-bootstraps the host system. 
-
- * installs ezjail
- * creates an admin-user
- * tweaks the sshd config
- * installs the *ezjail-remote* flavor so that all further commands can be run via fabric
-
-requires root login on the host (and ssh access, obviously)
-
-parameters
-**********
-
-admin
-  name of the admin user to create
-
-keyfile
-  public key for that admin user. if none is provided, a private key will be created and its public part installed.
-
+In its simplest form, ezjail remote offers the exact same commands as ezjail-admin, namely ``[archive|config|console|create|delete|install|list|restore|update]``. In addition to that it provides *enhanced versions of ``create`` and ``destroy`` (the latter a more thorough variant of the ``delete`` command.)
 
 create
 ------
