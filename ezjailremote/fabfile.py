@@ -6,7 +6,6 @@ from fabric.api import sudo, put, env, run, settings, prompt, task, hide
 from fabric.state import output
 from fabric.contrib.files import upload_template
 
-from ezjailremote import here
 
 EZJAIL_JAILDIR = '/usr/jails'
 EZJAIL_RC = '/usr/local/etc/rc.d/ezjail.sh'
@@ -21,7 +20,8 @@ def create(name,
     ip,
     admin=None,
     keyfile=None, 
-    flavour=u'basic'):
+    flavour=u'basic',
+    **kw):
 
     """<name>,<ip>(,<admin>,<keyfile>,flavour)
     
@@ -31,7 +31,8 @@ def create(name,
     admin: defaults to the current user
     keyfile: defaults to ~/.ssh/identity.pub
     flavour: defaults to 'basic' and refers to a LOCAL flavour, NOT any on the host
-    
+
+    any additional keyword arguments are passed to the flavour
     """
 
     if admin is None:
@@ -44,9 +45,12 @@ def create(name,
         sys.exit("No such keyfile '%s'" % keyfile)
 
     print("name: %s, ip: %s, flavour: %s" % (name, ip, flavour))
-    local_flavour_path = path.abspath(path.join(here, 'flavours', flavour))
-    if not path.exists(local_flavour_path):
-        sys.exit("No such flavour '%s'" % local_flavour_path)
+
+    try:
+        flavour_module = __import__('ezjailremote.flavours.%s' % flavour, globals(), locals(), ['setup'], -1)
+    except ImportError:
+        sys.exit("No such flavour '%s'" % flavour)
+    local_flavour_path = path.abspath(path.dirname(flavour_module.__file__))
 
     with settings(warn_only=True):
         tmp_flavour = '%s-%s' % (flavour, datetime.now().strftime('%Y%m%d%H%M%s'))
@@ -54,9 +58,13 @@ def create(name,
         sudo("mkdir %s" % remote_flavour_path)
         sudo("chown %s %s" % (env['user'], remote_flavour_path))
         put("%s/*" % local_flavour_path, remote_flavour_path)
-        upload_template(path.join(local_flavour_path, 'ezjail.flavour'),
-            path.join(remote_flavour_path, 'ezjail.flavour'),
-            context=locals(), backup=False)
+        local_flavour_script = path.join(local_flavour_path, 'ezjail.flavour')
+        if path.exists(local_flavour_script):
+            upload_template(local_flavour_script,
+                path.join(remote_flavour_path, 'ezjail.flavour'),
+                context=locals(), backup=False)
+        else:
+            print "Warning! no ezjail.flavour found (expected one at %s)" % local_flavour_script
 
         # create the jail using the uploaded flavour
         create_jail = sudo("%s create -f %s %s %s" % (EZJAIL_ADMIN, tmp_flavour, name, ip))
@@ -72,6 +80,9 @@ def create(name,
             sudo("chown -R %s %s" % (admin, ssh_config))
             # start up the jail:
             sudo("%s start %s" % (EZJAIL_RC, name))
+            # perform any additional setup the flavour may provide
+            if hasattr(flavour_module, 'setup'):
+                flavour_module.setup(name, ip, admin, keyfile, **kw)
         sudo("rm -rf %s" % remote_flavour_path)
 
 @task
