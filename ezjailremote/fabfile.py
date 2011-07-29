@@ -14,6 +14,14 @@ EZJAIL_ADMIN = '/usr/local/bin/ezjail-admin'
 env['shell'] = '/bin/sh -c'
 output['running'] = False
 
+@task
+def install(install_ports=False):
+    sudo("pkg_add -r ezjail")
+    install_basejail = "%s install"
+    if install_ports:
+        install_basejail += " -P"
+    sudo(install_basejail)
+
 
 @task
 def create(name, 
