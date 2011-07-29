@@ -85,3 +85,10 @@ To develop ezjail-remote itself, check out a copy of this repository and then::
 
   virtualenv . --no-site-package
   ./bin/python setup.py develop
+
+TODO:
+
+ * document flavour development
+ * use a base class for flavours
+ * list them (with their docstr) with ezjail-remote list-flavours
+ * allow chaining/nesting/stacking of flavours (i.e. always include basic)
