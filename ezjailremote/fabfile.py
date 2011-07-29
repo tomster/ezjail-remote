@@ -2,7 +2,7 @@ import sys
 from os import path
 from datetime import datetime
 
-from fabric.api import sudo, put, env, settings, prompt, task, hide
+from fabric.api import sudo, put, env, run, settings, prompt, task, hide
 from fabric.state import output
 from fabric.contrib.files import upload_template
 
@@ -86,8 +86,9 @@ def destroy(name):
     sudo("%s delete %s" % (EZJAIL_ADMIN, name))
     sudo("rm -rf %s" % (path.join(EZJAIL_JAILDIR, name)))
 
-@task(default=True, aliases=['archive', 'config', 'console', 'delete', 'install', 'list', 'restore', 'update'])
+@task(default=True, aliases=['archive', 'config', 'console', 'delete', 'install', 'list', 'restore', 'update', 'start', 'stop'])
 def usage(*xargs, **kw):
+    """(passed directly to ezjail-admin)"""
     command = env.get('command')
     if command == 'usage':
         command = '--help'
@@ -96,3 +97,7 @@ def usage(*xargs, **kw):
         args_string += '%s %s ' % item
     with hide('warnings', 'aborts'):
         sudo("%s %s %s %s" % (EZJAIL_ADMIN, command, args_string, ' '.join(xargs)))
+
+@task
+def jls():
+    run("jls")
