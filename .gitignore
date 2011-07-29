@@ -1,5 +1,4 @@
-.coverage
+dist
 bin
-coverage
 include
 lib
