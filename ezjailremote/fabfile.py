@@ -24,18 +24,18 @@ def install(install_ports=False):
 
 
 @task
-def create(name, 
+def create(name,
     ip,
     admin=None,
-    keyfile=None, 
+    keyfile=None,
     flavour=u'basic',
     **kw):
 
     """<name>,<ip>(,<admin>,<keyfile>,flavour)
-    
+
     Create a jail instance with the given name and IP address.
     Configures ssh access for the given admin user and ssh key.
-    
+
     admin: defaults to the current user
     keyfile: defaults to ~/.ssh/identity.pub
     flavour: defaults to 'basic' and refers to a LOCAL flavour, NOT any on the host
@@ -45,7 +45,7 @@ def create(name,
 
     if admin is None:
         admin = env['local_user']
-    
+
     if keyfile is None:
         keyfile = path.expanduser("~/.ssh/identity.pub")
 
@@ -93,8 +93,9 @@ def create(name,
                 flavour_module.setup(name, ip, admin, keyfile, **kw)
         sudo("rm -rf %s" % remote_flavour_path)
 
+
 @task
-def destroy(name): 
+def destroy(name):
     """<name>"""
     really = prompt('Are you ABSOLUTELY sure you want to destroy the jail %s?\n'
         'The jail will be stopped if running, deleted from ezjail and on the filesystem!!\n'
@@ -103,6 +104,7 @@ def destroy(name):
         sys.exit("Glad I asked...!")
     sudo("%s stop %s" % (EZJAIL_RC, name))
     sudo("%s delete -w %s" % (EZJAIL_ADMIN, name))
+
 
 @task(default=True, aliases=['archive', 'config', 'console', 'delete', 'install', 'list', 'restore', 'update', 'start', 'stop'])
 def usage(*xargs, **kw):
@@ -115,6 +117,7 @@ def usage(*xargs, **kw):
         args_string += '%s %s ' % item
     with hide('warnings', 'aborts'):
         sudo("%s %s %s %s" % (EZJAIL_ADMIN, command, args_string, ' '.join(xargs)))
+
 
 @task
 def jls():
