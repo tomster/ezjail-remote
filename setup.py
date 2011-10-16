@@ -36,6 +36,9 @@ setup(name='ezjailremote',
         "Fabric",
           # -*- Extra requirements: -*-
       ],
+      extras_require={
+          'tests': ['unittest2']
+      },
       entry_points="""
       # -*- Entry points: -*-
         [console_scripts]
