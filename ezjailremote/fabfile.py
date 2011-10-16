@@ -6,6 +6,7 @@ from fabric.api import sudo, put, env, run, settings, prompt, task, hide
 from fabric.state import output
 from fabric.contrib.files import upload_template
 
+from ezjailremote.utils import kwargs2commandline
 
 EZJAIL_JAILDIR = '/usr/jails'
 EZJAIL_RC = '/usr/local/etc/rc.d/ezjail.sh'
@@ -14,13 +15,44 @@ EZJAIL_ADMIN = '/usr/local/bin/ezjail-admin'
 env['shell'] = '/bin/sh -c'
 output['running'] = False
 
+
 @task
-def install(install_ports=False):
-    sudo("pkg_add -r ezjail")
-    install_basejail = "%s install"
-    if install_ports:
-        install_basejail += " -P"
-    sudo(install_basejail)
+def install(admin=None,
+    keyfile=None,
+    **kw):
+    """ assuming we have ssh access as root, set up the jailhost with ezjail etc.
+    sets up the admin user with ssh access and sudo privileges, then shuts out root
+    access again.
+
+    any other **kw are passed to `ezjail-admin install`
+    """
+    # check for being root
+    # check for admin user and key:
+    if admin is None:
+        admin = env['local_user']
+    if keyfile is None:
+        keyfile = path.expanduser("~/.ssh/identity.pub")
+    if not path.exists(keyfile):
+        sys.exit("No such keyfile '%s'" % keyfile)
+
+    # create admin user
+    run("pkg_add -r sudo")
+    run("pw useradd -n %(admin)s -u 1001 -m -d /home/%(admin)s -G wheel" % dict(admin=admin))
+    ssh_config = path.join('/', 'usr', 'home', admin, '.ssh')
+    run("mkdir -p %s" % ssh_config)
+    run("chown -R %s %s" % (admin, ssh_config))
+    remote_keyfile = path.join(ssh_config, 'authorized_keys')
+    put(keyfile, remote_keyfile)
+
+    # install ezjail
+    run("pkg_add -r ezjail")
+
+    # run ezjail's install command
+    install_basejail = "%s install%s" % (EZJAIL_ADMIN, kwargs2commandline(kw))
+    run(install_basejail)
+
+    # check if admin can login
+    # disable root login
 
 
 @task
