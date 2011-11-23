@@ -45,7 +45,9 @@ def install(admin=None,
     put(keyfile, remote_keyfile)
 
     # disable root login
-    run("grep -v PermitRootLogin /etc/ssh/sshd_config > /etc/ssh/sshd_config")
+    run("grep -v PermitRootLogin /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp")
+    run("mv /etc/ssh/sshd_config /etc/ssh/sshd_config.bak")
+    run("mv /etc/ssh/sshd_config.tmp /etc/ssh/sshd_config")
 
     # install ezjail
     run("pkg_add -r ezjail")
