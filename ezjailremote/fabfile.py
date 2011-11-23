@@ -43,7 +43,9 @@ def install(admin=None,
     run("chown -R %s %s" % (admin, ssh_config))
     remote_keyfile = path.join(ssh_config, 'authorized_keys')
     put(keyfile, remote_keyfile)
+    run("echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /usr/local/etc/sudoers")
 
+    # TODO: verify admin user can actually log in and sudo
     # disable root login
     run("grep -v PermitRootLogin /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp")
     run("mv /etc/ssh/sshd_config /etc/ssh/sshd_config.bak")
