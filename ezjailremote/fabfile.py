@@ -113,7 +113,7 @@ def create(name,
     with settings(warn_only=True):
         tmp_flavour = '%s-%s' % (flavour, datetime.now().strftime('%Y%m%d%H%M%s'))
         remote_flavour_path = path.join(EZJAIL_JAILDIR, 'flavours', tmp_flavour)
-        sudo("mkdir %s" % remote_flavour_path)
+        sudo("mkdir -p %s" % remote_flavour_path)
         sudo("chown %s %s" % (env['user'], remote_flavour_path))
         put("%s/*" % local_flavour_path, remote_flavour_path)
         local_flavour_script = path.join(local_flavour_path, 'ezjail.flavour')
