@@ -44,6 +44,9 @@ def install(admin=None,
     remote_keyfile = path.join(ssh_config, 'authorized_keys')
     put(keyfile, remote_keyfile)
 
+    # disable root login
+    run("grep -v PermitRootLogin /etc/ssh/sshd_config > /etc/ssh/sshd_config")
+
     # install ezjail
     run("pkg_add -r ezjail")
 
@@ -51,8 +54,6 @@ def install(admin=None,
     install_basejail = "%s install%s" % (EZJAIL_ADMIN, kwargs2commandline(kw))
     run(install_basejail)
 
-    # check if admin can login
-    # disable root login
 
 
 @task
