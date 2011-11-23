@@ -2,7 +2,7 @@ import sys
 from os import path
 from datetime import datetime
 
-from fabric.api import sudo, put, env, run, settings, prompt, task, hide
+from fabric.api import sudo, put, env, run, settings, prompt, task, hide, puts
 from fabric.state import output
 from fabric.contrib.files import upload_template
 
@@ -13,6 +13,7 @@ EZJAIL_RC = '/usr/local/etc/rc.d/ezjail.sh'
 EZJAIL_ADMIN = '/usr/local/bin/ezjail-admin'
 
 env['shell'] = '/bin/sh -c'
+output['output'] = False
 output['running'] = False
 
 
@@ -35,29 +36,41 @@ def install(admin=None,
     if not path.exists(keyfile):
         sys.exit("No such keyfile '%s'" % keyfile)
 
+    pkg_info = run("pkg_info")
+    user_info = run("pw usershow %s" % admin)
+
     # create admin user
-    run("pkg_add -r sudo")
-    run("pw useradd -n %(admin)s -u 1001 -m -d /home/%(admin)s -G wheel" % dict(admin=admin))
-    ssh_config = path.join('/', 'usr', 'home', admin, '.ssh')
-    run("mkdir -p %s" % ssh_config)
-    run("chown -R %s %s" % (admin, ssh_config))
-    remote_keyfile = path.join(ssh_config, 'authorized_keys')
-    put(keyfile, remote_keyfile)
-    run("echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /usr/local/etc/sudoers")
+    if "sudo" not in pkg_info:
+        run("pkg_add -r sudo")
+    if "no such user" in user_info:
+        puts("Creating admin user %s" % admin)
+        run("pw useradd -n %(admin)s -u 1001 -m -d /home/%(admin)s -G wheel" % dict(admin=admin))
+        ssh_config = path.join('/', 'usr', 'home', admin, '.ssh')
+        run("mkdir -p %s" % ssh_config)
+        run("chown -R %s %s" % (admin, ssh_config))
+        remote_keyfile = path.join(ssh_config, 'authorized_keys')
+        put(keyfile, remote_keyfile)
+        run("echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /usr/local/etc/sudoers")
+    else:
+        puts("Not touching existing user %s" % admin)
 
     # TODO: verify admin user can actually log in and sudo
     # disable root login
+    puts("Setting up ssh login")
     run("grep -v PermitRootLogin /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp")
+    run("echo 'PermitRootLogin no' >> /etc/ssh/sshd_config.tmp")
     run("mv /etc/ssh/sshd_config /etc/ssh/sshd_config.bak")
     run("mv /etc/ssh/sshd_config.tmp /etc/ssh/sshd_config")
+    run("/etc/rc.d/sshd restart")
 
     # install ezjail
-    run("pkg_add -r ezjail")
+    if "ezjail" not in pkg_info:
+        print "installing ezjail"
+        run("pkg_add -r ezjail")
 
-    # run ezjail's install command
-    install_basejail = "%s install%s" % (EZJAIL_ADMIN, kwargs2commandline(kw))
-    run(install_basejail)
-
+        # run ezjail's install command
+        install_basejail = "%s install%s" % (EZJAIL_ADMIN, kwargs2commandline(kw))
+        run(install_basejail)
 
 
 @task
