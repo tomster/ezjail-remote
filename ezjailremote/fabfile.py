@@ -1,8 +1,9 @@
+import re
 import sys
 from os import path
 from datetime import datetime
 
-from fabric.api import sudo, put, env, run, settings, prompt, task, hide, puts
+from fabric.api import sudo, put, env, run, settings, prompt, task, hide, puts, show, warn
 from fabric.state import output
 from fabric.contrib.files import upload_template
 
@@ -16,10 +17,13 @@ env['shell'] = '/bin/sh -c'
 output['output'] = False
 output['running'] = False
 
+is_ip = re.compile('(?:[\d]{1,3})\.(?:[\d]{1,3})\.(?:[\d]{1,3})\.(?:[\d]{1,3})')
+
 
 @task
 def install(admin=None,
     keyfile=None,
+    primary_ip=None,
     **kw):
     """ assuming we have ssh access as root, set up the jailhost with ezjail etc.
     sets up the admin user with ssh access and sudo privileges, then shuts out root
@@ -37,10 +41,23 @@ def install(admin=None,
         sys.exit("No such keyfile '%s'" % keyfile)
 
     pkg_info = run("pkg_info")
-    user_info = run("pw usershow %s" % admin)
+    with settings(hide("everything"), warn_only=True):
+        user_info = run("pw usershow %s" % admin)
+
+    if primary_ip is None and is_ip.match(env['host']):
+        primary_ip = env['host']
+
+    if primary_ip is None:
+        warn("No primary IP address specified!")
+    else:
+        run("grep -v ListenAddress /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp")
+        run("echo 'ListenAddress %s' >> /etc/ssh/sshd_config.tmp" % primary_ip)
+        run("mv /etc/ssh/sshd_config /etc/ssh/sshd_config.bak")
+        run("mv /etc/ssh/sshd_config.tmp /etc/ssh/sshd_config")
 
     # create admin user
     if "sudo" not in pkg_info:
+        puts("Installing sudo")
         run("pkg_add -r sudo")
     if "no such user" in user_info:
         puts("Creating admin user %s" % admin)
@@ -65,12 +82,13 @@ def install(admin=None,
 
     # install ezjail
     if "ezjail" not in pkg_info:
-        print "installing ezjail"
+        puts("Installing ezjail (this could take a while")
         run("pkg_add -r ezjail")
 
         # run ezjail's install command
         install_basejail = "%s install%s" % (EZJAIL_ADMIN, kwargs2commandline(kw))
         run(install_basejail)
+        run("echo 'ezjail_enable=YES' >> /etc/rc.conf")
 
 
 @task
@@ -110,7 +128,7 @@ def create(name,
         sys.exit("No such flavour '%s'" % flavour)
     local_flavour_path = path.abspath(path.dirname(flavour_module.__file__))
 
-    with settings(warn_only=True):
+    with settings(show("output"), warn_only=True):
         tmp_flavour = '%s-%s' % (flavour, datetime.now().strftime('%Y%m%d%H%M%s'))
         remote_flavour_path = path.join(EZJAIL_JAILDIR, 'flavours', tmp_flavour)
         sudo("mkdir -p %s" % remote_flavour_path)
