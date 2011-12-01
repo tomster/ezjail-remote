@@ -29,6 +29,24 @@ In particualar, you can...
 
 As a side effect of using fabric, you can run ezjail-admin commands against multiple jailhosts at the same time.
 
+Bootstrapping
+=============
+
+ezjail-remote doesn't only make it easy to create and manage jails, it also helps you set up a jailhost environment from scratch. This is done with the ``install`` command.
+
+To successfully run the install command the following requirements need to be met on the host:
+
+ * sshd is up and running
+ * ssh login for root is (temporarily) enabled
+ * currently we also require an internet connection (to install ezjail) but this will eventually be replaced with uploading a copy of ezjail.
+
+That's it. Everything else is done for you:
+
+ * an admin user is created
+ * root login is disabled
+ * ezjail is installed
+ * optionally network aliases are configured to assign to jails
+
 Commands
 ========
 
