@@ -183,10 +183,11 @@ def usage(*xargs, **kw):
     args_string = ''
     for item in kw.items():
         args_string += '%s %s ' % item
-    with hide('warnings', 'aborts'):
+    with show('output'):
         sudo("%s %s %s %s" % (EZJAIL_ADMIN, command, args_string, ' '.join(xargs)))
 
 
 @task
 def jls():
-    run("jls")
+    with show('output'):
+        run("jls")
