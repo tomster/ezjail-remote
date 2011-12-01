@@ -174,7 +174,7 @@ def destroy(name):
     sudo("%s delete -w %s" % (EZJAIL_ADMIN, name))
 
 
-@task(default=True, aliases=['archive', 'config', 'console', 'delete', 'install', 'list', 'restore', 'update', 'start', 'stop'])
+@task(default=True, aliases=['archive', 'config', 'console', 'delete', 'list', 'restore', 'update', 'start', 'stop'])
 def usage(*xargs, **kw):
     """(passed directly to ezjail-admin)"""
     command = env.get('command')
