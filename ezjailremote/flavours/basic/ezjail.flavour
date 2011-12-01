@@ -1,8 +1,8 @@
 #!/bin/sh
 pw useradd -n %(admin)s -u 1001 -s /bin/sh -m -d /home/%(admin)s -G wheel
 
-pkg_add -r mg
 pkg_add -r screen
 pkg_add -r bash
+pkg_add -r sudo
 
 chpass -s /usr/local/bin/bash %(admin)s
