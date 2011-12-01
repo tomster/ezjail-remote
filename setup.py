@@ -5,7 +5,7 @@ version = '0.2'
 setup(name='ezjailremote',
       version=version,
       description="a remote control and convenience wrapper for ezjail",
-      long_description = (
+      long_description=(
           open('README.rst').read()
           + '\n' +
           'Change history\n'
@@ -23,7 +23,7 @@ setup(name='ezjailremote',
         'Operating System :: POSIX :: BSD :: FreeBSD',
         'Programming Language :: Python',
         'Topic :: System :: Systems Administration',
-      ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      ],  # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       keywords='ezjail, FreeBSD, fabric',
       author='Tom Lazar',
       author_email='tom@tomster.org',
@@ -36,6 +36,9 @@ setup(name='ezjailremote',
         "Fabric",
           # -*- Extra requirements: -*-
       ],
+      extras_require={
+          'tests': ['unittest2']
+      },
       entry_points="""
       # -*- Entry points: -*-
         [console_scripts]
