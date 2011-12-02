@@ -163,6 +163,13 @@ def create(name,
 
 
 @task
+def debug(name):
+    with settings(show("output"), warn_only=True):
+        from ezjailremote.utils import get_jid
+        print "%s has jid %s" % (name, get_jid(name))
+
+
+@task
 def destroy(name):
     """<name>"""
     really = prompt('Are you ABSOLUTELY sure you want to destroy the jail %s?\n'
