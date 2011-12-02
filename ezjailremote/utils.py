@@ -1,3 +1,6 @@
+from fabric.api import sudo
+
+
 def str2bool(value):
     """
     >>> str2bool('True')
@@ -62,3 +65,14 @@ def kwargs2commandline(kwargs, boolflags=[]):
         else:
             result += " -%s %s" % (key, value)
     return result
+
+
+def get_jid(hostname):
+    """ if a jail with the given hostname is currently running, return its jid,
+        otherwise return None """
+    jails = sudo("jls host.hostname jid")
+    for line in jails.split('\r\n'):
+        name, jid = line.split()
+        if name == hostname:
+            return jid
+    return None
