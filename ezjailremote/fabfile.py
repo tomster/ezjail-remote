@@ -155,7 +155,6 @@ def create(name,
             sudo("%s start %s" % (EZJAIL_RC, name))
             # perform any additional setup the flavour may provide
             if flavour is not None:
-                puts("CALLING NEW JAIL setup")
                 jexec(ip, apply_flavour, flavour, **kw)
         sudo("rm -rf %s" % remote_flavour_path)
 
