@@ -1,4 +1,5 @@
-from fabric.api import sudo
+import sys
+from fabric.api import sudo, settings, env, execute, show
 
 
 def str2bool(value):
@@ -76,3 +77,21 @@ def get_jid(hostname):
         if name == hostname:
             return jid
     return None
+
+
+def jexec(name, command, *args, **kwargs):
+    """ execute the given command inside the given jail by creating a new ssh session
+        to the host.
+    """
+    with settings(show("output"), warn_only=True):
+        hosts = env.hosts
+        env.hosts = [name]
+        execute(command, *args, **kwargs)
+        env.hosts = hosts
+
+
+def get_flavour(name):
+    try:
+        return __import__('ezjailremote.flavours.%s' % name, globals(), locals(), ['setup'], -1)
+    except ImportError:
+        sys.exit("No such flavour '%s'" % name)
