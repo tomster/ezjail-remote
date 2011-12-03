@@ -148,6 +148,9 @@ def create(name,
             remote_keyfile = path.join(ssh_config, 'authorized_keys')
             put(keyfile, remote_keyfile, use_sudo=True)
             sudo("chown -R %s %s" % (admin, ssh_config))
+            sudoers = path.join(jail_path, 'usr', 'local', 'etc', 'sudoers')
+            sudo("chown 0 %s" % sudoers)
+            sudo("chmod 0440 %s" % sudoers)
             # start up the jail:
             sudo("%s start %s" % (EZJAIL_RC, name))
             # perform any additional setup the flavour may provide
