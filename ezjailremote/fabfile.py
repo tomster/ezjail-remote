@@ -1,4 +1,3 @@
-import re
 import sys
 from os import path
 from datetime import datetime
@@ -7,17 +6,15 @@ from fabric.api import sudo, put, env, run, settings, prompt, task, hide, puts, 
 from fabric.state import output
 from fabric.contrib.files import upload_template
 
-from ezjailremote.utils import kwargs2commandline, jexec, get_flavour
+from ezjailremote.utils import kwargs2commandline, jexec, get_flavour, is_ip
 
 EZJAIL_JAILDIR = '/usr/jails'
 EZJAIL_RC = '/usr/local/etc/rc.d/ezjail.sh'
 EZJAIL_ADMIN = '/usr/local/bin/ezjail-admin'
 
 env['shell'] = '/bin/sh -c'
-output['output'] = False
-output['running'] = False
-
-is_ip = re.compile('(?:[\d]{1,3})\.(?:[\d]{1,3})\.(?:[\d]{1,3})\.(?:[\d]{1,3})')
+# output['output'] = False
+# output['running'] = False
 
 
 @task
@@ -163,7 +160,6 @@ def create(name,
 def apply_flavour(flavour, *args, **kwargs):
     flavour_module = get_flavour(flavour)
     if hasattr(flavour_module, 'setup'):
-        puts("CALLING NEW JAIL")
         flavour_module.setup(*args, **kwargs)
 
 

@@ -1,6 +1,9 @@
+import re
 import sys
 
 from fabric.api import sudo, settings, env, execute, show
+
+is_ip = re.compile('(?:[\d]{1,3})\.(?:[\d]{1,3})\.(?:[\d]{1,3})\.(?:[\d]{1,3})')
 
 
 def str2bool(value):
