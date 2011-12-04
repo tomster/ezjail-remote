@@ -160,11 +160,6 @@ def create(name,
 
 
 @task
-def debug(hostname):
-    jexec(hostname, show_info)
-
-
-@task
 def apply_flavour(flavour, *args, **kwargs):
     flavour_module = get_flavour(flavour)
     if hasattr(flavour_module, 'setup'):
