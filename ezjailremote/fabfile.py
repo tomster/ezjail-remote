@@ -52,8 +52,7 @@ def install(admin=None,
         run("mv /etc/ssh/sshd_config /etc/ssh/sshd_config.bak")
         run("mv /etc/ssh/sshd_config.tmp /etc/ssh/sshd_config")
     # prevent syslogd listening on any addresses (to avoid warnings at jail startup)
-    run('echo syslogd_flags="-ss" >> /etc/rc.conf')
-
+    run("echo syslogd_flags='-ss' >> /etc/rc.conf")
     # create admin user
     if "sudo" not in pkg_info:
         puts("Installing sudo")
