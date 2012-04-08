@@ -3,7 +3,6 @@ from os import path
 from datetime import datetime
 
 from fabric.api import sudo, put, env, run, settings, prompt, task, hide, puts, show, warn
-from fabric.state import output
 from fabric.contrib.files import upload_template
 
 from ezjailremote.utils import kwargs2commandline, jexec, get_flavour, is_ip
