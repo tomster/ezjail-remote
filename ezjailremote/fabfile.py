@@ -27,7 +27,8 @@ def install(admin=None,
 
     any other **kw are passed to `ezjail-admin install`
     """
-    # check for being root
+    # force user to root
+    env['user'] = 'root'
     # check for admin user and key:
     if admin is None:
         admin = env['local_user']
