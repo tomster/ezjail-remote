@@ -53,6 +53,8 @@ def install(admin=None,
         run("mv /etc/ssh/sshd_config.tmp /etc/ssh/sshd_config")
     # prevent syslogd listening on any addresses (to avoid warnings at jail startup)
     run("echo syslogd_flags='-ss' >> /etc/rc.conf")
+    # enable ezjail
+    run("echo ezjail_enable='YES' >> /etc/rc.conf")
     # create admin user
     if "sudo" not in pkg_info:
         puts("Installing sudo")
