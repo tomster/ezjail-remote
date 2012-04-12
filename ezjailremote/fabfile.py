@@ -81,6 +81,7 @@ def install(admin=None,
     run("echo 'PermitRootLogin no' >> /etc/ssh/sshd_config.tmp")
     run("mv /etc/ssh/sshd_config /etc/ssh/sshd_config.bak")
     run("mv /etc/ssh/sshd_config.tmp /etc/ssh/sshd_config")
+    run("echo sshd_enable='YES' >> /etc/rc.conf")
     run("/etc/rc.d/sshd restart")
 
     # install ezjail
