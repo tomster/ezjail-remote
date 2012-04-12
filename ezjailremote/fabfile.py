@@ -25,7 +25,10 @@ def install(admin=None,
     sets up the admin user with ssh access and sudo privileges, then shuts out root
     access again.
 
-    any other **kw are passed to `ezjail-admin install`
+    any other **kw are passed to `ezjail-admin install`. i.e. to install with ports (`-p`):
+
+    ezjail-remote install:p=True
+
     """
     # force user to root
     env['user'] = 'root'
