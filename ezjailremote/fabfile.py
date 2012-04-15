@@ -90,7 +90,8 @@ def install(admin=None,
         run("pkg_add -r ezjail")
 
         # run ezjail's install command
-        install_basejail = "%s install%s" % (EZJAIL_ADMIN, kwargs2commandline(kw))
+        install_basejail = "%s install%s" % (EZJAIL_ADMIN, kwargs2commandline(kw,
+            boolflags=['p', 'P', 'm', 'M', 's', 'S']))
         run(install_basejail)
         run("echo 'ezjail_enable=YES' >> /etc/rc.conf")
 
