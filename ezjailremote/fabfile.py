@@ -17,17 +17,12 @@ env['shell'] = '/bin/sh -c'
 
 
 @task
-def install(admin=None,
+def bootstrap(admin=None,
     keyfile=None,
-    primary_ip=None,
-    **kw):
+    primary_ip=None):
     """ assuming we have ssh access as root, set up the jailhost with ezjail etc.
     sets up the admin user with ssh access and sudo privileges, then shuts out root
     access again.
-
-    any other **kw are passed to `ezjail-admin install`. i.e. to install with ports (`-p`):
-
-    ezjail-remote install:p=True
 
     """
     # force user to root
@@ -84,7 +79,18 @@ def install(admin=None,
     run("echo sshd_enable='YES' >> /etc/rc.conf")
     run("/etc/rc.d/sshd restart")
 
+
+@task
+def install(**kw):
+    """ assuming install has been run, install ezjail and run ezjail-admin install.
+
+    any other **kw are passed to `ezjail-admin install`. i.e. to install with ports (`-p`):
+
+    ezjail-remote install:p=True
+
+    """
     # install ezjail
+    pkg_info = run("pkg_info")
     if "ezjail" not in pkg_info:
         puts("Installing ezjail (this could take a while")
         run("pkg_add -r ezjail")
@@ -94,6 +100,8 @@ def install(admin=None,
             boolflags=['p', 'P', 'm', 'M', 's', 'S']))
         run(install_basejail)
         run("echo 'ezjail_enable=YES' >> /etc/rc.conf")
+
+
 
 
 @task
