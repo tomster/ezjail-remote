@@ -84,10 +84,12 @@ def bootstrap(admin=None,
 
 
 @task
-def install(source='pkg_add', **kw):
+def install(source='pkg_add', jailzfs=None, **kw):
     """ assuming bootstrap has been run, install ezjail and run ezjail-admin install.
 
-    if source is 'pkg_add' it installs a binary package, if it's 'cvs' it install from current CVS:
+    if `source` is 'pkg_add' it installs a binary package, if it's 'cvs' it install from current CVS:
+
+    if `jailzfs` is set, assume using ZFS and set the jailzfs path in ezjails configuration.
 
     all **kw are passed to `ezjail-admin install`. i.e. to install with ports (`-p`):
 
@@ -104,6 +106,10 @@ def install(source='pkg_add', **kw):
                 sudo("make install")
         else:
             sudo("pkg_add -r ezjail")
+        sudo("cp /usr/local/etc/ezjail.conf.sample /usr/local/etc/ezjail.conf")
+        if jailzfs:
+            sudo("""echo 'ezjail_use_zfs="YES"' >> /usr/local/etc/ezjail.conf""")
+            sudo("""echo 'ezjail_jailzfs="%s"' >> /usr/local/etc/ezjail.conf""" % jailzfs)
 
         # run ezjail's install command
         install_basejail = "%s install%s" % (EZJAIL_ADMIN, kwargs2commandline(kw,

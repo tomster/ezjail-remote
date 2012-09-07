@@ -67,6 +67,11 @@ If you want to use a CVS snapshot::
 
   ezjail-remote -H IP_ADDR install:source=cvs
 
+If you want to use ZFS (and you should!) supply the pool it should use via the jailzfs parameter::
+
+  ezjail-remote -H IP_ADDR install:jailzfs='jails/ezjail'
+
+
 Commands
 ========
 
