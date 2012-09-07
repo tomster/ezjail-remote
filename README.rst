@@ -130,6 +130,7 @@ To develop ezjail-remote itself, check out a copy of this repository and then::
   ./bin/python setup.py develop
 
 TODO:
+*****
 
  * document flavour development
  * use a base class for flavours
