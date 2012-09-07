@@ -32,20 +32,37 @@ As a side effect of using fabric, you can run ezjail-admin commands against mult
 Bootstrapping
 =============
 
-ezjail-remote doesn't only make it easy to create and manage jails, it also helps you set up a jailhost environment from scratch. This is done with the ``install`` command.
+ezjail-remote doesn't only make it easy to create and manage jails, it also helps you set up a jailhost environment from scratch. This is done with the ``bootstrap`` and ``install`` commands.
 
-To successfully run the install command the following requirements need to be met on the host:
+To successfully run the bootstrap command the following requirements need to be met on the host:
 
  * sshd is up and running
  * ssh login for root is (temporarily) enabled
  * currently we also require an internet connection (to install ezjail) but this will eventually be replaced with uploading a copy of ezjail.
 
-That's it. Everything else is done for you:
+For example (logged in as root on the console)::
 
- * an admin user is created
- * root login is disabled
- * ezjail is installed
- * optionally network aliases are configured to assign to jails
+  echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+  echo 'ifconfig_em0=DHCP' >> /etc/rc.conf
+  passwd # give yourself a TEMP_PASSWORD
+  dhclient em0 # note the IP_ADDR you get
+  /etc/rc.d/sshd onestart
+
+
+Now you can run the bootstrap command using the temporary password you gave yourself::
+
+  ezjail-remote -H IP_ADDR bootstrap
+
+This 
+
+ * disables root login
+ * permanently enables SSH
+ * creates an admin user with your username and public SSH key
+
+To install ezjail you can use the ``install`` command, which simply installs it from the ports. This has been factored out from the ``bootstrap`` command in order to allow custom installations from CVS. If you don't need that, simply::
+
+  ezjail-remote -H IP_ADDR install
+
 
 Commands
 ========

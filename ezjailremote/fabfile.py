@@ -20,10 +20,13 @@ env['shell'] = '/bin/sh -c'
 def bootstrap(admin=None,
     keyfile=None,
     primary_ip=None):
-    """ assuming we have ssh access as root, set up the jailhost with ezjail etc.
-    sets up the admin user with ssh access and sudo privileges, then shuts out root
-    access again.
+    """ assuming we have ssh access as root sets up permanent ssh access, creates the admin user with
+    ssh access and sudo privileges, then shuts out root login again.
 
+    admin: username for the admin account, defaults to your local username
+    keyfile: full path to your public SSH key, defaults to ~/.ssh/identity.pub
+    primary_ip: the IP address for which to configure the jailhost, can be omitted if the host is given
+        as an IP address with the -H parameter
     """
     # force user to root
     env['user'] = 'root'
@@ -69,7 +72,6 @@ def bootstrap(admin=None,
     else:
         puts("Not touching existing user %s" % admin)
 
-    # TODO: verify admin user can actually log in and sudo
     # disable root login
     puts("Setting up ssh login")
     run("grep -v PermitRootLogin /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp")
@@ -78,13 +80,14 @@ def bootstrap(admin=None,
     run("mv /etc/ssh/sshd_config.tmp /etc/ssh/sshd_config")
     run("echo sshd_enable='YES' >> /etc/rc.conf")
     run("/etc/rc.d/sshd restart")
+    puts("You now should be able to login with `ssh %s`" % primary_ip)
 
 
 @task
 def install(**kw):
-    """ assuming install has been run, install ezjail and run ezjail-admin install.
+    """ assuming bootstrap has been run, install ezjail and run ezjail-admin install.
 
-    any other **kw are passed to `ezjail-admin install`. i.e. to install with ports (`-p`):
+    all **kw are passed to `ezjail-admin install`. i.e. to install with ports (`-p`):
 
     ezjail-remote install:p=True
 
@@ -100,8 +103,6 @@ def install(**kw):
             boolflags=['p', 'P', 'm', 'M', 's', 'S']))
         run(install_basejail)
         run("echo 'ezjail_enable=YES' >> /etc/rc.conf")
-
-
 
 
 @task
