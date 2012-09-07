@@ -56,13 +56,16 @@ Now you can run the bootstrap command using the temporary password you gave your
 This 
 
  * disables root login
- * permanently enables SSH
+ * permanently enables SSH for the jail host (and limits it to the primary IP address)
  * creates an admin user with your username and public SSH key
 
-To install ezjail you can use the ``install`` command, which simply installs it from the ports. This has been factored out from the ``bootstrap`` command in order to allow custom installations from CVS. If you don't need that, simply::
+To install ezjail you can use the ``install`` command, which either installs it from the ports or from CVS (for the brave)::
 
   ezjail-remote -H IP_ADDR install
 
+If you want to use a CVS snapshot::
+
+  ezjail-remote -H IP_ADDR install:source=cvs
 
 Commands
 ========

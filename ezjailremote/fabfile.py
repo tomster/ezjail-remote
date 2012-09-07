@@ -2,7 +2,7 @@ import sys
 from os import path
 from datetime import datetime
 
-from fabric.api import sudo, put, env, run, settings, prompt, task, hide, puts, show, warn
+from fabric.api import sudo, put, env, run, settings, prompt, task, hide, puts, show, warn, cd
 from fabric.contrib.files import upload_template
 
 from ezjailremote.utils import kwargs2commandline, jexec, get_flavour, is_ip
@@ -84,8 +84,10 @@ def bootstrap(admin=None,
 
 
 @task
-def install(**kw):
+def install(source='pkg_add', **kw):
     """ assuming bootstrap has been run, install ezjail and run ezjail-admin install.
+
+    if source is 'pkg_add' it installs a binary package, if it's 'cvs' it install from current CVS:
 
     all **kw are passed to `ezjail-admin install`. i.e. to install with ports (`-p`):
 
@@ -96,13 +98,18 @@ def install(**kw):
     pkg_info = run("pkg_info")
     if "ezjail" not in pkg_info:
         puts("Installing ezjail (this could take a while")
-        run("pkg_add -r ezjail")
+        if source == 'cvs':
+            run("cvs -d :pserver:anoncvs@cvs.erdgeist.org:/home/cvsroot co ezjail")
+            with cd("ezjail"):
+                sudo("make install")
+        else:
+            sudo("pkg_add -r ezjail")
 
         # run ezjail's install command
         install_basejail = "%s install%s" % (EZJAIL_ADMIN, kwargs2commandline(kw,
             boolflags=['p', 'P', 'm', 'M', 's', 'S']))
-        run(install_basejail)
-        run("echo 'ezjail_enable=YES' >> /etc/rc.conf")
+        sudo(install_basejail)
+        sudo("echo 'ezjail_enable=YES' >> /etc/rc.conf")
 
 
 @task
