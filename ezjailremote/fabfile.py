@@ -124,6 +124,7 @@ def create(name,
     admin=None,
     keyfile=None,
     flavour=None,
+    ctype=None,
     **kw):
 
     """<name>,<ip>(,<admin>,<keyfile>,flavour)
@@ -134,6 +135,7 @@ def create(name,
     admin: defaults to the current user
     keyfile: defaults to ~/.ssh/identity.pub
     flavour: defaults to 'basic' and refers to a LOCAL flavour, NOT any on the host
+    ctype: defaults to None and refers to the `-c` flag, meaning, you can set it to `simple`, `bde`, `eli` or `zfs`.
 
     any additional keyword arguments are passed to the flavour
     """
@@ -162,7 +164,11 @@ def create(name,
             path.join(remote_flavour_path, 'ezjail.flavour'),
             context=locals(), backup=False)
         # create the jail using the uploaded flavour
-        create_jail = sudo("%s create -f %s %s %s" % (EZJAIL_ADMIN, tmp_flavour, name, ip))
+        if ctype:
+            ctype = ' -c %s' % ctype
+        else:
+            ctype = ''
+        create_jail = sudo("%s create -f %s%s %s %s" % (EZJAIL_ADMIN, tmp_flavour, ctype, name, ip))
         if create_jail.succeeded:
             jail_path = path.join(EZJAIL_JAILDIR, name)
             # copy resolv.conf from host

@@ -1,6 +1,8 @@
 0.3 - Unreleased
 ----------------
 
+ * add support for creating ZFS (and other image based) jails
+
 0.2 - 2012-09-07
 ----------------
 
