@@ -9,7 +9,7 @@ Its main features are:
 Usage
 =====
 
-ezjail-remote uses the `fabric <http://docs.fabfile.org>`_ library to remotely run its tasks. Basically it provides a so-called *fabfile* that contains all of the commands of ``ezjail-admin`` (version 3.1 as of this writing).
+ezjail-remote uses the `fabric <http://docs.fabfile.org>`_ library to remotely run its tasks. Basically it provides a so-called *fabfile* that contains all of the commands of ``ezjail-admin`` (version 3.2 as of this writing).
 
 This means that its usage differs slightly from that of ``ezjail-admin``. In particular, you provide the hostname of the jail server via the ``-H`` switch and the parameters for the command (such as the name of the jail etc) separated with a colon, like so::
 

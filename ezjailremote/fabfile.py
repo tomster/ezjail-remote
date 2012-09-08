@@ -8,7 +8,7 @@ from fabric.contrib.files import upload_template
 from ezjailremote.utils import kwargs2commandline, jexec, get_flavour, is_ip
 
 EZJAIL_JAILDIR = '/usr/jails'
-EZJAIL_RC = '/usr/local/etc/rc.d/ezjail.sh'
+EZJAIL_RC = '/usr/local/etc/rc.d/ezjail'
 EZJAIL_ADMIN = '/usr/local/bin/ezjail-admin'
 
 env['shell'] = '/bin/sh -c'
