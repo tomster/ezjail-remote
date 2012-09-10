@@ -102,6 +102,9 @@ keyfile
 flavour
   the name of the local flavour, defaults to ``basic``.
 
+ctype
+  defaults to None and refers to the `-c` flag, meaning, you can set it to `simple`, `bde`, `eli` or `zfs`.
+
 
 destroy
 -------
