@@ -59,6 +59,8 @@ This
  * permanently enables SSH for the jail host (and limits it to the primary IP address)
  * creates an admin user with your username and public SSH key
 
+..note: Before installing ezjail with the ``install`` command you may want to set up additional things, such as ZFS pools, network interface aliases, etc.
+
 To install ezjail you can use the ``install`` command, which either installs it from the ports or from CVS (for the brave)::
 
   ezjail-remote -H IP_ADDR install
