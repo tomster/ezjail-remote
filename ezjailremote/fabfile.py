@@ -29,6 +29,7 @@ def bootstrap(admin=None,
         as an IP address with the -H parameter
     """
     # force user to root
+    orig_user = env['user']
     env['user'] = 'root'
     # check for admin user and key:
     if admin is None:
@@ -81,6 +82,7 @@ def bootstrap(admin=None,
     run("echo sshd_enable='YES' >> /etc/rc.conf")
     run("/etc/rc.d/sshd restart")
     puts("You now should be able to login with `ssh %s`" % primary_ip)
+    env['user'] = orig_user
 
 
 @task
