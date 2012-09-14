@@ -118,6 +118,8 @@ def install(source='pkg_add', jailzfs=None, **kw):
             boolflags=['p', 'P', 'm', 'M', 's', 'S']))
         sudo(install_basejail)
         sudo("echo 'ezjail_enable=YES' >> /etc/rc.conf")
+    else:
+        puts('ezjail already installed. not doing anything!')
 
 
 @task
