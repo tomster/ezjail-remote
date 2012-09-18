@@ -1,6 +1,7 @@
-0.3 - Unreleased
-----------------
+0.2.2 - Unreleased
+------------------
 
+ * Use ezjail version 3.2.2 feature to create ZFS jails by default
 
 0.2.1 - 2012-09-10
 ------------------

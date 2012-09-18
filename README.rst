@@ -6,10 +6,12 @@ Its main features are:
  * you can ssh into jails created by ``ezjail-remote`` immediately upon creation (no more manual mucking about with sshd config or uploading your public key!)
  * unlike ``ezjail-admin``, ``ezjail-remote`` is not installed on the jail host, but on your local machine. This means *it doesn't introduce any further dependencies on the jail host whatsoever* (ezjail itself purposefully limits itself to ``sh``).
 
+..note: In general ezjail-remote tries to keep up with ezjail development, so unless stated otherwise, it requires (and by default also installs) the latest version of ezjail (version 3.2.2 as of this writing).
+
 Usage
 =====
 
-ezjail-remote uses the `fabric <http://docs.fabfile.org>`_ library to remotely run its tasks. Basically it provides a so-called *fabfile* that contains all of the commands of ``ezjail-admin`` (version 3.2 as of this writing).
+ezjail-remote uses the `fabric <http://docs.fabfile.org>`_ library to remotely run its tasks. Basically it provides a so-called *fabfile* that contains all of the commands of ``ezjail-admin``.
 
 This means that its usage differs slightly from that of ``ezjail-admin``. In particular, you provide the hostname of the jail server via the ``-H`` switch and the parameters for the command (such as the name of the jail etc) separated with a colon, like so::
 

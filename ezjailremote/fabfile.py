@@ -111,6 +111,7 @@ def install(source='pkg_add', jailzfs=None, **kw):
         sudo("cp /usr/local/etc/ezjail.conf.sample /usr/local/etc/ezjail.conf")
         if jailzfs:
             sudo("""echo 'ezjail_use_zfs="YES"' >> /usr/local/etc/ezjail.conf""")
+            sudo("""echo 'ezjail_use_zfs_for_jails="YES"' >> /usr/local/etc/ezjail.conf""")
             sudo("""echo 'ezjail_jailzfs="%s"' >> /usr/local/etc/ezjail.conf""" % jailzfs)
 
         # run ezjail's install command
