@@ -130,6 +130,7 @@ def create(name,
     keyfile=None,
     flavour=None,
     ctype=None,
+    sshd=True,
     **kw):
 
     """<name>,<ip>(,<admin>,<keyfile>,flavour)
@@ -141,17 +142,17 @@ def create(name,
     keyfile: defaults to ~/.ssh/identity.pub
     flavour: defaults to 'basic' and refers to a LOCAL flavour, NOT any on the host
     ctype: defaults to None and refers to the `-c` flag, meaning, you can set it to `simple`, `bde`, `eli` or `zfs`.
+    sshd: if True, enable sshd, upload and enable a public key
 
     any additional keyword arguments are passed to the flavour
     """
-
     if admin is None:
         admin = env['local_user']
 
     if keyfile is None:
         keyfile = path.expanduser("~/.ssh/identity.pub")
 
-    if not path.exists(keyfile):
+    if not path.exists(keyfile) and sshd:
         sys.exit("No such keyfile '%s'" % keyfile)
 
     print("name: %s, ip: %s, flavour: %s" % (name, ip, flavour))
@@ -178,12 +179,15 @@ def create(name,
             jail_path = path.join(EZJAIL_JAILDIR, name)
             # copy resolv.conf from host
             sudo("cp /etc/resolv.conf %s" % path.join(jail_path, 'etc', 'resolv.conf'))
-            # copy the key file into flavour
-            ssh_config = path.join(jail_path, 'home', admin, '.ssh')
-            sudo("mkdir -p %s" % ssh_config)
-            remote_keyfile = path.join(ssh_config, 'authorized_keys')
-            sudo("chown -R %s %s" % (admin, ssh_config))
-            put(keyfile, remote_keyfile)
+            # configure sshd
+            if sshd:
+                # copy the key file into flavour
+                ssh_config = path.join(jail_path, 'home', admin, '.ssh')
+                sudo("mkdir -p %s" % ssh_config)
+                remote_keyfile = path.join(ssh_config, 'authorized_keys')
+                sudo("chown -R %s %s" % (admin, ssh_config))
+                put(keyfile, remote_keyfile)
+                sudo("""echo 'sshd_enable="YES"' >> /etc/rc.conf""")
             sudoers = path.join(jail_path, 'usr', 'local', 'etc', 'sudoers')
             sudo("chown 0 %s" % sudoers)
             sudo("chmod 0440 %s" % sudoers)
