@@ -1,6 +1,7 @@
 0.2.2 - Unreleased
 ------------------
 
+ * provide a base class representing a jail for more convenient API usage
  * Use ezjail version 3.2.2 feature to create ZFS jails by default
  * Make use and configuration of sshd in created jail optional
 
