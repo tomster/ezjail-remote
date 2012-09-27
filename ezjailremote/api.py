@@ -5,6 +5,11 @@ from fabric.contrib.project import rsync_project
 from fabfile import create, destroy
 
 
+class JailHost(object):
+
+    def __init__(self, config):
+        self.config = config
+
 
 class BaseJail(object):
     """
