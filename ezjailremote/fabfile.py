@@ -221,8 +221,7 @@ def destroy(name):
         'Type YES to continue:' % name)
     if really != 'YES':
         sys.exit("Glad I asked...!")
-    sudo("%s stop %s" % (EZJAIL_RC, name))
-    sudo("%s delete -w %s" % (EZJAIL_ADMIN, name))
+    sudo("%s delete -fw %s" % (EZJAIL_ADMIN, name))
 
 
 @task(default=True, aliases=['archive', 'config', 'console', 'delete', 'list', 'restore', 'update', 'start', 'stop'])
