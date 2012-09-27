@@ -2,7 +2,8 @@ import inspect
 from os import path
 from fabric import api as fab
 from fabric.contrib.project import rsync_project
-from fabfile import create
+from fabfile import create, destroy
+
 
 
 class BaseJail(object):
@@ -77,6 +78,9 @@ class BaseJail(object):
 
     def update(self):
         pass
+
+    def destroy(self):
+        destroy(self.name)
 
     def console(self, command):
         """ execute the given command inside the jail by calling ezjail-admin console.
