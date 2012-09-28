@@ -34,6 +34,7 @@ setup(name='ezjailremote',
       zip_safe=False,
       install_requires=[
         "Fabric",
+        "docopt",
           # -*- Extra requirements: -*-
       ],
       extras_require={
