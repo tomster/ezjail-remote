@@ -44,5 +44,6 @@ setup(name='ezjailremote',
       # -*- Entry points: -*-
         [console_scripts]
         ezjail-remote=ezjailremote:commandline
+        ezjail-deploy=ezjailremote.deploy:commandline
       """,
       )

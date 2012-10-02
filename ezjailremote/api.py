@@ -1,14 +1,59 @@
 import inspect
 from os import path
+from collections import OrderedDict
 from fabric import api as fab
 from fabric.contrib.project import rsync_project
-from fabfile import create, destroy
+from fabfile import bootstrap
+from fabfile import create
+from fabfile import destroy
+from fabfile import install
 
 
 class JailHost(object):
 
-    def __init__(self, config):
+    jailzfs = None
+    install_ports = True
+
+    def __init__(self, blueprints=None, config=dict()):
+        """ config needs to contain at least one entry named 'host' which defines
+        the jail host.
+        any other entries that don't start with an underscore are treated as jail definitions.
+        """
         self.config = config
+        for key, value in config['host'].items():
+            setattr(self, key, value)
+
+        if blueprints is None:
+            from ezjailremote import api
+            blueprints = api
+
+        self.available_blueprints = OrderedDict()
+        for name in dir(blueprints):
+            obj = getattr(blueprints, name)
+            if inspect.isclass(obj) and issubclass(obj, BaseJail):
+                if obj.name:
+                    obj_name = obj.name
+                else:
+                    obj_name = obj.__name__.split('Jail')[0].lower()
+                self.available_blueprints[obj_name] = obj
+
+        self.jails = OrderedDict()
+        for jail_name in set(config.keys()).union(set(self.available_blueprints.keys())):
+            if jail_name.startswith('_') or jail_name == 'host':
+                continue
+            if jail_name in self.available_blueprints:
+                jail_factory = self.available_blueprints[jail_name]
+            else:
+                try:
+                    jail_factory = getattr(blueprints, config['jail_name']['blueprint'])
+                except AttributeError:
+                    exit('%s not in blueprints, you need to specify name of blueprint class explictly in the config')
+            self.jails[jail_name] = jail_factory(jailhost=self, **config.get(jail_name, dict()))
+
+    def bootstrap(self):
+        # run ezjailremote's basic bootstrap
+        bootstrap(primary_ip=self.ip_addr)
+        install(source='cvs', jailzfs=self.jailzfs, p=self.install_ports)
 
 
 class BaseJail(object):
@@ -30,8 +75,9 @@ class BaseJail(object):
     ip_addr = None
     fs_local_root = None
     fs_remote_root = None
-    configurehasrun = False
+    preparehasrun = False
     ports_to_install = []
+    jailhost = None
 
     def __init__(self, **config):
         """
@@ -54,6 +100,9 @@ class BaseJail(object):
         """
         for key, value in config.items():
             setattr(self, key, value)
+        # if we didn't get an explict name, set a default:
+        if not self.name:
+            self.name = self.__class__.__name__.split('Jail')[0].lower()
         # if we didn't get an explict root, set a default:
         if self.fs_local_root is None:
             self.fs_local_root = '%s/' % path.join(path.abspath(path.dirname(inspect.getfile(self.__class__))), self.name)
@@ -61,10 +110,9 @@ class BaseJail(object):
             self.fs_remote_root = '/usr/jails/%s' % self.name
 
     def create(self):
-        create(self.name,
-            self.ip_addr, ctype=self.ctype, sshd=self.sshd)
+        create(self.name, self.ip_addr, ctype=self.ctype, sshd=self.sshd)
 
-    def configure(self):
+    def prepare(self):
         # upload site root
         if path.exists(self.fs_local_root):
             fab.sudo('rm -rf /tmp/%s' % self.name)
@@ -75,20 +123,20 @@ class BaseJail(object):
         # install ports
         for port in self.ports_to_install:
             self.console('make -C /usr/ports/%s install' % port)
-        self.extra_configure()
-        self.configurehasrun = True
+        self.configure()
+        self.preparehasrun = True
 
-    def extra_configure(self):
+    def configure(self):
         pass
 
     def update(self):
         pass
 
     def destroy(self):
-        destroy(self.name)
+        return destroy(self.name)
 
     def console(self, command):
         """ execute the given command inside the jail by calling ezjail-admin console.
         This is particularly useful for jails w/o sshd and/or a public IP
         """
-        fab.sudo('''ezjail-admin console -e "%s" %s''' % (command, self.name))
+        return fab.sudo('''ezjail-admin console -e "%s" %s''' % (command, self.name))
