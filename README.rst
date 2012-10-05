@@ -4,7 +4,7 @@ Its main features are:
 
  * more sophisticated support for flavours, i.e. interactive configuration and/or templating as opposed to ezjail's hardcoded flavours
  * you can ssh into jails created by ``ezjail-remote`` immediately upon creation (no more manual mucking about with sshd config or uploading your public key!)
- * unlike ``ezjail-admin``, ``ezjail-remote`` is not installed on the jail host, but on your local machine. This means *it doesn't introduce any further dependencies on the jail host whatsoever* (ezjail itself purposefully limits itself to ``sh``).
+ * unlike ``ezjail-admin``, ``ezjail-remote`` does not need to be installed on the jail host, but can reside on your local machine. This means *it doesn't introduce any further dependencies on the jail host whatsoever* (ezjail itself purposefully limits itself to ``sh``).
 
 ..note: In general ezjail-remote tries to keep up with ezjail development, so unless stated otherwise, it requires (and by default also installs) the latest version of ezjail (version 3.2.2 as of this writing).
 
