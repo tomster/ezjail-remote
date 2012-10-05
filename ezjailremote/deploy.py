@@ -1,5 +1,5 @@
 """Usage:
-    ezjail-deploy [options] bootstrap
+    ezjail-deploy [options] (bootstrap|install)
     ezjail-deploy [options] (init|prepare|configure|update|destroy) [JAIL]...
 
 Deploy a jail host and/or jail(s).
@@ -70,9 +70,11 @@ def commandline():
     # 'point' fabric to the jail host
     fab.env['host_string'] = jailhost.ip_addr
 
-    # execute the bootstrap command
+    # execute the bootstrap and/or install command
     if arguments['bootstrap']:
         jailhost.bootstrap()
+    if arguments['install'] or arguments['bootstrap']:
+        jailhost.install()
         exit()
 
     # validate the jail name(s)
@@ -86,6 +88,7 @@ def commandline():
                 ', '.join(list(difference)),
                 ', '.join(list(alljails)))
         exit()
+
     # execute the jail command
     for jail_name in jails:
         jail = jailhost.jails[jail_name]

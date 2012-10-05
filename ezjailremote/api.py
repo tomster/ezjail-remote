@@ -13,6 +13,7 @@ class JailHost(object):
 
     jailzfs = None
     install_ports = True
+    install_from = 'pkg_add'
 
     def __init__(self, blueprints=None, config=dict()):
         """ config needs to contain at least one entry named 'host' which defines
@@ -24,7 +25,7 @@ class JailHost(object):
             setattr(self, key, value)
 
         if blueprints is None:
-            from ezjailremote import api
+            from ezjailremote import api  # use examples instead
             blueprints = api
 
         self.available_blueprints = OrderedDict()
@@ -53,7 +54,9 @@ class JailHost(object):
     def bootstrap(self):
         # run ezjailremote's basic bootstrap
         bootstrap(primary_ip=self.ip_addr)
-        install(source='cvs', jailzfs=self.jailzfs, p=self.install_ports)
+
+    def install(self):
+        install(source=self.install_from, jailzfs=self.jailzfs, p=self.install_ports)
 
 
 class BaseJail(object):
@@ -78,6 +81,7 @@ class BaseJail(object):
     preparehasrun = False
     ports_to_install = []
     jailhost = None
+    
 
     def __init__(self, **config):
         """
