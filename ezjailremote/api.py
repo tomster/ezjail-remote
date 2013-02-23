@@ -73,7 +73,7 @@ class BaseJail(object):
     """
 
     name = ""
-    ctype = 'zfs'
+    ctype = 'zfs'  # default to ZFS jails
     sshd = False
     ip_addr = None
     fs_local_root = None
@@ -81,7 +81,6 @@ class BaseJail(object):
     preparehasrun = False
     ports_to_install = []
     jailhost = None
-    
 
     def __init__(self, **config):
         """
@@ -91,12 +90,12 @@ class BaseJail(object):
         :param: ip_addr: its IP address
         :param sshd: if True, an admin user will be created using the name and default ssh key of the user
             calling the fabfile and sshd will be configured and run inside the jail. Set this to False if
-            you want to create a jail with a private IP which should not be accessible from outside the jailhost.
+            you want to create a jail with a private IP which should not be accessible from outside the jailhost (or if you don't want SSH access at all).
         :param ports_to_install: a list of strings denoting any ports that should be installed during ``configure``.
             The names are expected to be relative to ``/usr/ports``, i.e. ``lang/python``.
         :param fs_local_root: local path to a directory tree which will be uploaded to the root of the new jail during ``configure``.
             If None, a local path with the name of the jail relative to the location of the file containing the instance
-            of thsi class is assumed.
+            of this class is assumed.
             One use-case for this is to provide port configuration files in ``/var/db/ports/*/options`` which allows the ports
             installation to run without user-intervention.
         :param fs_remote_root: path to the jail, defaults to ``/usr/jails/NAMEOFJAIL``.

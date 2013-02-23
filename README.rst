@@ -3,7 +3,7 @@
 Its main features are:
 
  * more sophisticated support for flavours, i.e. interactive configuration and/or templating as opposed to ezjail's hardcoded flavours
- * you can ssh into jails created by ``ezjail-remote`` immediately upon creation (no more manual mucking about with sshd config or uploading your public key!)
+ * if you like, you can ssh into jails created by ``ezjail-remote`` immediately upon creation (no more manual mucking about with sshd config or uploading your public key!)
  * unlike ``ezjail-admin``, ``ezjail-remote`` does not need to be installed on the jail host, but can reside on your local machine. This means *it doesn't introduce any further dependencies on the jail host whatsoever* (ezjail itself purposefully limits itself to ``sh``).
 
 ..note: In general ezjail-remote tries to keep up with ezjail development, so unless stated otherwise, it requires (and by default also installs) the latest version of ezjail (version 3.2.2 as of this writing).
@@ -21,7 +21,7 @@ or::
 
   ezjail-remote -H host(s) <COMMAND>:param1=foo,param3=bar
 
-See the `full documentation of what fabric has to offer here <http://docs.fabfile.org/en/1.2.0/usage/fab.html#command-line-options>`_.
+See the `full documentation of what fabric has to offer here <http://docs.fabfile.org/en/latest/usage/fab.html#command-line-options>`_.
 
 In particualar, you can...
 
@@ -29,12 +29,13 @@ In particualar, you can...
  * run ``ezjail-remote -l`` to see a list of the available *commands*
  * run ``ezjail-remote -d COMMAND`` to see a detailed description of a command
 
-As a side effect of using fabric, you can run ezjail-admin commands against multiple jailhosts at the same time.
+As a side effect of using fabric, you can run ezjail-admin commands against multiple jailhosts at the same time. (think 'cluster'...)
 
-Bootstrapping
-=============
 
-ezjail-remote doesn't only make it easy to create and manage jails, it also helps you set up a jailhost environment from scratch. This is done with the ``bootstrap`` and ``install`` commands.
+Bootstrapping the jail host
+===========================
+
+ezjail-remote doesn't only make it easy to create and manage jails, it also helps you set up the *host environment* itself from scratch. This is done with the ``bootstrap`` and ``install`` commands.
 
 To successfully run the bootstrap command the following requirements need to be met on the host:
 
