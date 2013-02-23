@@ -79,7 +79,7 @@ def bootstrap(admin=None,
     run("echo 'PermitRootLogin no' >> /etc/ssh/sshd_config.tmp")
     run("mv /etc/ssh/sshd_config /etc/ssh/sshd_config.bak")
     run("mv /etc/ssh/sshd_config.tmp /etc/ssh/sshd_config")
-    run("echo sshd_enable='YES' >> /etc/rc.conf")
+    run("echo sshd_enable=YES >> /etc/rc.conf")
     run("/etc/rc.d/sshd restart")
     puts("You now should be able to login with `ssh %s`" % primary_ip)
     env['user'] = orig_user
@@ -187,7 +187,7 @@ def create(name,
                 remote_keyfile = path.join(ssh_config, 'authorized_keys')
                 sudo("chown -R %s %s" % (admin, ssh_config))
                 put(keyfile, remote_keyfile)
-                sudo("""echo 'sshd_enable="YES"' >> /etc/rc.conf""")
+                sudo("echo sshd_enable=YES >> /etc/rc.conf")
             sudoers = path.join(jail_path, 'usr', 'local', 'etc', 'sudoers')
             sudo("chown 0 %s" % sudoers)
             sudo("chmod 0440 %s" % sudoers)
