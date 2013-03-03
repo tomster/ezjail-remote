@@ -187,7 +187,7 @@ def create(name,
                 remote_keyfile = path.join(ssh_config, 'authorized_keys')
                 sudo("chown -R %s %s" % (admin, ssh_config))
                 put(keyfile, remote_keyfile)
-                sudo("""echo 'sshd_enable="YES"' >> /etc/rc.conf""")
+                sudo("""echo 'sshd_enable="YES"' >> %s""" % path.join(jail_path, 'etc', 'rc.conf'))
             sudoers = path.join(jail_path, 'usr', 'local', 'etc', 'sudoers')
             sudo("chown 0 %s" % sudoers)
             sudo("chmod 0440 %s" % sudoers)
