@@ -152,6 +152,8 @@ Change history
 
  * Use ezjail version 3.2.2 feature to create ZFS jails by default
  * Make use and configuration of sshd in created jail optional
+ * Various smaller bugfixes
+ * officially out of alpha :)
 
 0.2.1 - 2012-09-10
 ------------------
