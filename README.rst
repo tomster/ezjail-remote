@@ -109,6 +109,9 @@ flavour
 ctype
   defaults to None and refers to the `-c` flag, meaning, you can set it to `simple`, `bde`, `eli` or `zfs`.
 
+sshd
+  defaults to True. If so, it enables and configures SSH access inside the jail (using admin/keyfile given above)
+
 
 destroy
 -------
