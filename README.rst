@@ -147,7 +147,7 @@ TODO
 Change history
 ==============
 
-0.2.2 - Unreleased
+0.2.2 - 2013-05-03
 ------------------
 
  * Use ezjail version 3.2.2 feature to create ZFS jails by default
