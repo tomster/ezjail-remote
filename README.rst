@@ -136,10 +136,38 @@ To develop ezjail-remote itself, check out a copy of this repository and then::
   virtualenv . --no-site-package
   ./bin/python setup.py develop
 
-TODO:
-*****
+TODO
+====
 
  * document flavour development
  * use a base class for flavours
  * list them (with their docstr) with ezjail-remote list-flavours
  * allow chaining/nesting/stacking of flavours (i.e. always include basic)
+
+Change history
+==============
+
+0.2.2 - Unreleased
+------------------
+
+ * Use ezjail version 3.2.2 feature to create ZFS jails by default
+ * Make use and configuration of sshd in created jail optional
+
+0.2.1 - 2012-09-10
+------------------
+
+ * add support for creating ZFS (and other image based) jails
+
+0.2 - 2012-09-07
+----------------
+
+ * split installation into ``bootstrap`` (which has proven itself useful outside of a ezjail setup) and ``install``
+ * added support for ZFS
+ * can install ezjail from CVS
+ * added support for flavours outside the ezjail-remote package itself (using namespace packages for ezjailremote.flavours.\*)
+ * added `start`, `stop` and `jls` commands.
+
+0.1 - 2011-07-29
+----------------
+
+Initial release. Provides 'pass through' of all commands, as well as enhanced versions for ``create`` and ``destroy``.

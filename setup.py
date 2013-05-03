@@ -6,15 +6,7 @@ setup(name='ezjailremote',
       version=version,
       description="a remote control and convenience wrapper for ezjail",
       long_description=(
-          open('README.rst').read()
-          + '\n' +
-          'Change history\n'
-          '==============\n'
-          + '\n' +
-          open('HISTORY.rst').read()
-          + '\n' +
-          'Download\n'
-          '========\n'),
+          open('README.rst').read()),
       classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
