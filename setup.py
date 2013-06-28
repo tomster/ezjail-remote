@@ -26,6 +26,7 @@ setup(name='ezjailremote',
       zip_safe=False,
       install_requires=[
         "Fabric",
+        "pyOpenSSL",
           # -*- Extra requirements: -*-
       ],
       extras_require={
